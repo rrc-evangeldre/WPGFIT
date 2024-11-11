@@ -65,7 +65,10 @@ hr {
     justify-content: space-between;
 }
 
-.side-nav { margin-bottom: 100px; }
+.side-nav { 
+	margin-bottom: 50px; 
+    height: 580px; 
+}
 
 .side-nav-item {
     list-style: none;
@@ -253,7 +256,7 @@ a:hover {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-    margin-top: 100px;
+    margin-top: 50px;
     margin-left: 350px;
 }
 

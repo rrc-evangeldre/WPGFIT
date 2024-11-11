@@ -1,19 +1,29 @@
-<?php include 'activity/header.php'; ?>
+<?php 
+include 'activity/header.php'; ?>
+
 
 <div class="container-fluid">
-        <main class="main-content">
-            <!-- Search form -->
-            <div class="row">
-                <div class="col-12">
-                    <form method="GET" class="form-inline search-form">                
-                        <input class="form-control search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
-                        <button class="search-button" type="submit">
-                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
-                        </button>                                
-                    </form>
-                </div>                
-            </div>     
-            <!-- Posts -->       
+    <main class="main-content">
+        <?php
+        if (isset($_SESSION['success_message'])) {
+            echo "<p class='alert alert-success'>" . $_SESSION['success_message'] . "</p>";
+            unset($_SESSION['success_message']);
+        }
+        ?>
+        
+        <!-- Search form -->
+        <div class="row">
+            <div class="col-12">
+                <form method="GET" class="form-inline search-form">                
+                    <input class="form-control search-input" name="query" type="text" placeholder="Search..." aria-label="Search">
+                    <button class="search-button" type="submit">
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                    </button>                                
+                </form>
+            </div>                
+        </div>     
+
+        <!-- Posts -->         
             <div class="row row-posts">
                 <article class="col-12 col-md-6 post">
                     <hr class="post-separator">
