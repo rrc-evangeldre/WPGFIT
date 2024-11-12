@@ -1,9 +1,14 @@
 <?php
-session_start();
-if (isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
-    echo "Welcome, " . htmlspecialchars($_SESSION['username']) . "!";
-} else {
-    echo "You are not logged in.";
+/*******w******** 
+        
+    Name: Raphael Evangelista
+    Date: November 11, 2024
+    Description: This is the header template that manages session start, page titles, and active state for navigation.
+
+****************/
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
 $current_page = basename($_SERVER['PHP_SELF']);

@@ -1,4 +1,11 @@
 <?php
+/*******w******** 
+        
+    Name: Raphael Evangelista
+    Date: November 12, 2024
+    Description: This handles the registration process by validating user inserted values.
+
+****************/
 session_start();
 include 'db_connect.php';
 
@@ -16,6 +23,19 @@ $password = $_POST['password'];
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 try {
+    // Check if username or email is already taken
+    $checkQuery = "SELECT * FROM users WHERE Email = :email OR Username = :username";
+    $checkStmt = $db->prepare($checkQuery);
+    $checkStmt->bindParam(':email', $email);
+    $checkStmt->bindParam(':username', $username);
+    $checkStmt->execute();
+
+    if ($checkStmt->rowCount() > 0) {
+        $_SESSION['register_error'] = "Username or email is already taken. Please choose another.";
+        header("Location: login.php");
+        exit;
+    }
+
     // Insert user data into database
     $query = "INSERT INTO users (Email, Username, Password) VALUES (:email, :username, :password)";
     $stmt = $db->prepare($query);
@@ -36,6 +56,6 @@ try {
     }
 }
 
-header("Location: index.php");
+header("Location: login.php");
 exit;
 ?>

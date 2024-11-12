@@ -1,9 +1,22 @@
 <?php 
+/*******w******** 
+        
+    Name: Raphael Evangelista
+    Date: November 12, 2024
+    Description: Login and Registration Form. Handles user login and registration, showing error messages for invalid inputs such as taken username or email.
+
+****************/
+
 include 'activity/header.php';
 
 if (isset($_SESSION['login_error'])) {
     echo "<script>alert('" . $_SESSION['login_error'] . "');</script>";
-    unset($_SESSION['login_error']); // Clear the error after displaying
+    unset($_SESSION['login_error']);
+}
+
+if (isset($_SESSION['register_error'])) {
+    echo "<script>alert('" . $_SESSION['register_error'] . "');</script>";
+    unset($_SESSION['register_error']);
 }
 ?>
 <section class="forms-section">
@@ -26,7 +39,7 @@ if (isset($_SESSION['login_error'])) {
                     <button type="submit" class="btn-login">Login</button>
                 </form>
             </div>
-
+            
             <!-- Registration Form -->
             <div class="form-wrapper">
                 <button type="button" class="switcher switcher-signup">Sign Up <span class="underline"></span></button>
@@ -70,4 +83,4 @@ if (isset($_SESSION['login_error'])) {
             </div>
         </div>
 </section>
-    <script src="js/form.js"></script>
+<?php include 'activity/footer.php'; ?>

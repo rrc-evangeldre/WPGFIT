@@ -1,5 +1,14 @@
 <?php
-session_start();
+/*******w******** 
+        
+    Name: Raphael Evangelista
+    Date: November 12, 2024
+    Description: This handles attempted user log ins.
+    
+****************/
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include 'db_connect.php';
 
 $username = htmlspecialchars($_POST['username']);
@@ -16,6 +25,8 @@ if ($user && password_verify($password, $user['Password'])) {
     // Set session variables to indicate logged-in status and store user info
     $_SESSION['user_id'] = $user['UserID'];
     $_SESSION['username'] = $user['Username'];
+    $_SESSION['role'] = $user['Role'];
+    $_SESSION['login_success'] = "Login successful! Welcome, " . $user['Username'] . ".";
     $_SESSION['is_logged_in'] = true;  // Logged-in flag
 
     // Redirect to the home page or dashboard

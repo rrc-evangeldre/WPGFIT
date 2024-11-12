@@ -510,7 +510,7 @@ a:hover {
 
 .checkbox-group {
     display: flex;
-    gap: 70px; /* Adjust gap size as needed */
+    gap: 70px;
 }
 
 .btn-login {
