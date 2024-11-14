@@ -9,11 +9,11 @@
 
     session_start(); 
 
-    // Check if a login success message is set in the session and display it
-    if (isset($_SESSION['login_success'])) {
-        echo "<script>alert('" . $_SESSION['login_success'] . "');</script>";
-        unset($_SESSION['login_success']); // Clear the message after displaying
-    }
+    // // Check if a login success message is set in the session and display it
+    // if (isset($_SESSION['login_success'])) {
+    //     echo "<script>alert('" . $_SESSION['login_success'] . "');</script>";
+    //     unset($_SESSION['login_success']); // Clear the message after displaying
+    // }
 
     include 'activity/header.php'; 
 ?>
@@ -51,24 +51,6 @@
                 <div class="d-flex justify-content-between">
                     <span>12 comments</span>
                     <span>by dwhitewalkers</span>
-                </div>
-            </article>
-
-            <article class="col-12 col-md-6 post">
-                <hr class="post-separator">
-                <img src="img/gym2.jpg" alt="Image" class="img-fluid">
-                <h2 class="post-title color-primary post-title-size">Template for Post 2</h2>
-                <p class="post-title">
-                    Post will be created soon.
-                </p>
-                <div class="d-flex justify-content-between info-margin">
-                    <span class="color-primary">Nutrition . Strength Training</span>
-                    <span class="color-primary">May 1, 2024</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>48 comments</span>
-                    <span>by khaldrogo</span>
                 </div>
             </article>
 

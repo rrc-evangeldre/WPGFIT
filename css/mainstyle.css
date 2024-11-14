@@ -227,22 +227,6 @@ ul {
     padding-right: 15px;
 }
 
-/* Single Posts */
-hr.post-separator { border-top: 5px solid #00ccff; }
-
-.post-title { padding-top: 30px; }
-.info-margin { padding-top: 45px; }
-.prev-next-margin { margin-bottom: 75px; margin-top: 100px; }
-.prev-next-gap { margin-right: 20px; }
-.color-primary, span.color-primary { color: #00ccff; }
-a.color-gray, .color-gray { color: #999; }
-a.color-gray:hover { color: #099; }
-button:focus { outline: none; }
-a:hover { 
-    text-decoration: none; 
-    color: #048c8c;
-}
-
 /* Form CSS by Max Konoval https://codepen.io/frontendmax */
 
 *,
@@ -525,4 +509,29 @@ a:hover {
 	background: #00ccff;
 	box-shadow: inset 0 0 0 2px #fbfdff;
 	transform: translateX(30%);
+}
+
+/* Post page */
+.post-container {
+	width: 100%;
+	margin-left: 400px;
+	margin-top: 200px;
+	max-width: 600px;
+	border-radius: 15px; 
+  }
+
+/* Single Posts */
+hr.post-separator { border-top: 5px solid #00ccff; }
+
+.post-title { padding-top: 30px; }
+.info-margin { padding-top: 45px; }
+.prev-next-margin { margin-bottom: 75px; margin-top: 100px; }
+.prev-next-gap { margin-right: 20px; }
+.color-primary, span.color-primary { color: #00ccff; }
+a.color-gray, .color-gray { color: #999; }
+a.color-gray:hover { color: #099; }
+button:focus { outline: none; }
+a:hover { 
+    text-decoration: none; 
+    color: #048c8c;
 }

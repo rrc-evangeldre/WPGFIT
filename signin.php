@@ -26,7 +26,7 @@ if ($user && password_verify($password, $user['Password'])) {
     $_SESSION['user_id'] = $user['UserID'];
     $_SESSION['username'] = $user['Username'];
     $_SESSION['role'] = $user['Role'];
-    $_SESSION['login_success'] = "Login successful! Welcome, " . $user['Username'] . ".";
+    // $_SESSION['login_success'] = "Login successful! Welcome, " . $user['Username'] . ".";
     $_SESSION['is_logged_in'] = true;  // Logged-in flag
 
     // Redirect to the home page or dashboard
