@@ -1,37 +1,110 @@
-<?php 
+<?php  
 /*******w******** 
-        
+ 
     Name: Raphael Evangelista
     Date: November 14, 2024
     Description: Create a new post with this page.
-
+    
 ****************/
 
+include 'db_connect.php';
 include 'activity/header.php';
+
+// Ensure the user is logged in before allowing them to post
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}if (!isset($_SESSION['user_id'])) {
+    // Redirect to login page with a message if the user is not logged in
+    $_SESSION['login_error'] = "You must be logged in to make a post.";
+    header("Location: login.php");
+    exit();
+}
+
+// Initialize variables
+$uploadError = '';
+$filePath = null;
+
+// Function to check file MIME type and extension
+function file_is_allowed($temporary_path, $new_path) {
+    $allowed_mime_types = ['image/gif', 'image/jpeg', 'image/png'];  // Allowed image MIME types
+    $allowed_file_extensions = ['gif', 'jpg', 'jpeg', 'png'];  // Allowed file extensions
+
+    $actual_file_extension = strtolower(pathinfo($new_path, PATHINFO_EXTENSION));
+    $actual_mime_type = mime_content_type($temporary_path);
+
+    return in_array($actual_file_extension, $allowed_file_extensions) && in_array($actual_mime_type, $allowed_mime_types);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve the form fields
+    $title = $_POST['title'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $category = isset($_POST['category']) ? implode(', ', $_POST['category']) : 'General'; // Default to 'General' if no category is selected
+    $userID = $_SESSION['user_id']; // Get the logged-in user's ID
+    $visibility = 'Public';
+
+    // Handle file upload
+    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/';
+        $filePath = $uploadDir . basename($_FILES['file']['name']);
+
+        // Validate file type
+        if (file_is_allowed($_FILES['file']['tmp_name'], $filePath)) {
+            // Move the uploaded file to the "uploads" directory
+            if (!move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+                $uploadError = 'File upload failed.';
+            }
+        } else {
+            $uploadError = "Invalid file type. Only JPG, PNG, and GIF files are allowed.";
+            $filePath = null;  // Set filePath to null if file is not allowed
+        }
+    }
+
+    // Only insert into the database if there's no upload error
+    if (empty($uploadError)) {
+        try {
+            // Insert post into the database, including file path if valid
+            $stmt = $db->prepare("INSERT INTO Posts (UserID, Title, Content, Category, Visibility, filePath) 
+                                  VALUES (:userID, :title, :description, :category, :visibility, :filePath)");
+            $stmt->execute([
+                ':userID' => $userID,
+                ':title' => $title,
+                ':description' => $description,
+                ':category' => $category,
+                ':visibility' => $visibility,
+                ':filePath' => $filePath
+            ]);
+            // Redirect to index page after successful post creation
+            header("Location: index.php");
+            exit();
+        } catch (PDOException $e) {
+            $uploadError = "Error: " . $e->getMessage();  // Catch any DB errors and display them
+        }
+    }
+}
 ?>
 
 <div class="container mt-5">
   <div class="post-container p-4 border rounded">
-    <form accept-charset="UTF-8" action="" method="POST" enctype="multipart/form-data" target="_blank">
+    <form accept-charset="UTF-8" action="" method="POST" enctype="multipart/form-data">
       <div class="post-group">
         <label for="title">Title</label>
         <input type="text" name="title" class="form-control" id="title" placeholder="Enter a title for your post" required="required">
       </div>
       <div class="post-group">
-        <label for="description" required="required">Description</label>
+        <label for="description">Description</label>
         <input type="text" name="description" class="form-control" id="description" placeholder="body text (optional)">
       </div>
       <div class="post-group">
-        <label for="category">Add a Tag (optional)</label>
-        <select class="form-control" id="category" name="platform">
-          <option>General (default)</option>
-          <option>Advice</option>
-          <option>Question</option>
-          <option>Discussion</option>
-          <option>Cardio</option>
-          <option>Strength Training</option>
-          <option>Nutrition</option>
-        </select>
+        <label>Add Tags (optional)</label><br>
+        <input type="checkbox" id="general" name="category[]" value="General" checked> General
+        <input type="checkbox" id="advice" name="category[]" value="Advice"> Advice
+        <input type="checkbox" id="question" name="category[]" value="Question"> Question
+        <input type="checkbox" id="discussion" name="category[]" value="Discussion"> Discussion
+        <input type="checkbox" id="cardio" name="category[]" value="Cardio"> Cardio
+        <input type="checkbox" id="strength" name="category[]" value="Strength"> Strength
+        <input type="checkbox" id="nutrition" name="category[]" value="Nutrition"> Nutrition
+        <input type="checkbox" id="progress" name="category[]" value="Progress"> Progress
       </div>
       <hr>
       <div class="post-group mt-3">
@@ -39,7 +112,50 @@ include 'activity/header.php';
         <input type="file" name="file">
       </div>
       <hr>
+
+      <!-- Display error message if file validation fails -->
+      <?php if ($uploadError): ?>
+        <div class="alert alert-danger mt-3"><?php echo $uploadError; ?></div>
+      <?php endif; ?>
+
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 </div>
+
+<?php include 'activity/footer.php'; ?>
+
+<script>
+// JavaScript to enforce a limit of 3 checked categories
+
+const generalCheckbox = document.getElementById('general');
+const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#general)');
+const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+
+let isGeneralUncheckedOnce = false;
+
+function updateCategoryLimit() {
+    const checkedCategories = document.querySelectorAll('input[type="checkbox"]:checked');
+    const checkedCount = checkedCategories.length;
+
+    // If more than 3 checkboxes are selected, uncheck the last one
+    if (checkedCount > 3) {
+        alert('You can only select up to 3 categories.');
+        checkedCategories[checkedCategories.length - 1].checked = false;
+    }
+}
+
+// Add event listeners for changes to any of the checkboxes
+allCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        // Prevent selecting more than 3 categories
+        updateCategoryLimit();
+
+        // Uncheck "General" if another category is selected for the first time
+        if (!isGeneralUncheckedOnce && this !== generalCheckbox && this.checked) {
+            generalCheckbox.checked = false; // Uncheck the General checkbox
+            isGeneralUncheckedOnce = true;  // Set the flag to prevent unchecking General again
+        }
+    });
+});
+</script>

@@ -19,7 +19,6 @@ hr {
 .header {
     background-color: #00ccff;
     color: white;
-    
     position: fixed;
     top: 0;
     left: 0;
@@ -67,7 +66,7 @@ hr {
 
 .side-nav { 
 	margin-bottom: 50px; 
-    height: 580px; 
+    height: 520px; 
 }
 
 .side-nav-item {
@@ -534,4 +533,35 @@ button:focus { outline: none; }
 a:hover { 
     text-decoration: none; 
     color: #048c8c;
+}
+
+/* Set the width and height for all images */
+img.img-fluid {
+    max-width: 400px;
+    height: 220px; 
+    object-fit: cover; 
+}
+
+/* For default image */
+img[src="img/defaultimage.png"] {
+	margin-top: -20px;
+	margin-left: 45px;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Center the buttons horizontally at the top */
+.edit-button {
+    position: absolute;
+    top: 30px;    /* Adjust distance from the top */
+    left: 77%;    /* Center horizontally */
+    transform: translateX(-50%);  /* Adjust position to fully center */
+}
+
+.edit-button a{
+	color: #00ccff;
+
+}
+.edit-button a:hover {
+    color: #0d809c;  /* Darker green when hovered */
 }

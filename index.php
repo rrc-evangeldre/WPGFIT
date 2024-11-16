@@ -1,21 +1,41 @@
 <?php 
 /*******w******** 
-        
+ 
     Name: Raphael Evangelista
     Date: November 12, 2024
     Description: This is the main page of the site where posts are displayed.
 
 ****************/
 
-    session_start(); 
+session_start();
+include 'db_connect.php';
+include 'activity/header.php'; 
 
-    // // Check if a login success message is set in the session and display it
-    // if (isset($_SESSION['login_success'])) {
-    //     echo "<script>alert('" . $_SESSION['login_success'] . "');</script>";
-    //     unset($_SESSION['login_success']); // Clear the message after displaying
-    // }
+// Define the number of posts per page
+$postsPerPage = 6;
 
-    include 'activity/header.php'; 
+// Get the current page from the URL (default is page 1)
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($currentPage - 1) * $postsPerPage;
+
+// Fetch posts from the database with LIMIT and OFFSET for pagination
+$query = $db->prepare("SELECT Posts.*, Users.Username, 
+                            (SELECT COUNT(*) FROM Comments WHERE Comments.PostID = Posts.PostID) AS CommentCount 
+                     FROM Posts 
+                     JOIN Users ON Posts.UserID = Users.UserID 
+                     ORDER BY DateCreated DESC 
+                     LIMIT :postsPerPage OFFSET :offset");
+$query->bindParam(':postsPerPage', $postsPerPage, PDO::PARAM_INT);
+$query->bindParam(':offset', $offset, PDO::PARAM_INT);
+$query->execute();
+$posts = $query->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch total number of posts for pagination
+$totalPostsQuery = $db->query("SELECT COUNT(*) FROM Posts");
+$totalPosts = $totalPostsQuery->fetchColumn();
+$totalPages = ceil($totalPosts / $postsPerPage);
+
+$defaultImagePath = 'img/defaultimage.png';
 ?>
 
 <div class="container-fluid">
@@ -34,101 +54,59 @@
 
         <!-- Posts -->
         <div class="row row-posts">
-            <!-- Each post is in a Bootstrap column for responsive design -->
-            <article class="col-12 col-md-6 post">
-                <hr class="post-separator">
-                <img src="img/gym1.jpg" alt="Image" class="img-fluid">
-                <span class="position-absolute new-badge">New</span>
-                <h2 class="post-title color-primary post-title-size">Template for Post 1</h2>
-                <p class="post-title">
-                    Post will be created soon. *Also edit pic sizes*
-                </p>
-                <div class="d-flex justify-content-between info-margin">
-                    <span class="color-primary">Cardio . Advice</span>
-                    <span class="color-primary">June 8, 2024</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>12 comments</span>
-                    <span>by dwhitewalkers</span>
-                </div>
-            </article>
-
-            <article class="col-12 col-md-6 post">
-                <hr class="post-separator">
-                <img src="img/gym2.jpg" alt="Image" class="img-fluid">                            
-                <span class="position-absolute new-badge">New</span>
-                <h2 class="post-title color-primary post-title-size">Template for Post 2</h2>
-                <p class="post-title">
-                    Post will be created soon.
-                </p>
-                <div class="d-flex justify-content-between info-margin">
-                    <span class="color-primary">Nutrition . Strength Training</span>
-                    <span class="color-primary">May 1, 2024</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>48 comments</span>
-                    <span>by khaldrogo</span>
-                </div>
-            </article>
-
-            <article class="col-12 col-md-6 post">
-                <hr class="post-separator">
-                <img src="img/gym3.jpg" alt="Image" class="img-fluid">
-                <h2 class="post-title color-primary post-title-size">Template for Post 3</h2>
-                <p class="post-title">
-                    Post will be created soon.
-                </p>
-                <div class="d-flex justify-content-between info-margin">
-                    <span class="color-primary">Advice . Nutrition</span>
-                    <span class="color-primary">April 11, 2024</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>21 comments</span>
-                    <span>by jonsnow</span>
-                </div>
-            </article>
-
-            <article class="col-12 col-md-6 post">
-                <hr class="post-separator">
-                <img src="img/gym4.jpg" alt="Image" class="img-fluid">
-                <h2 class="post-title color-primary post-title-size">Template for Post 4</h2>
-                <p class="post-title">
-                    Post will be created soon.
-                <div class="d-flex justify-content-between info-margin">
-                    <span class="color-primary">Cardio</span>
-                    <span class="color-primary">March 4, 2024</span>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between">
-                    <span>72 comments</span>
-                    <span>by samwelltarly</span>
-                </div>
-            </article>
+            <?php foreach ($posts as $post): ?>
+                <article class="col-12 col-md-6 post">
+                    <hr class="post-separator">
+                    
+                    <!-- Use default image if user doesn't attach an image to their post -->
+                    <?php
+                    $imagePath = !empty($post['filePath']) ? htmlspecialchars($post['filePath']) : $defaultImagePath;
+                    ?>
+                    <img src="<?= $imagePath ?>" alt="Post Image" class="img-fluid">
+                    
+                    <!-- Make the post title a link to the full post page -->
+                    <h2 class="post-title color-primary post-title-size">
+                        <a href="single_post.php?postid=<?= $post['PostID'] ?>"><?= htmlspecialchars($post['Title']) ?></a>
+                    </h2>
+                    
+                    <!-- Post Description with limit and "Read More" link -->
+                    <p class="post-description">
+                        <?= strlen($post['Content']) > 50 ? htmlspecialchars(substr($post['Content'], 0, 50)) . "... <a href='single_post.php?postid=" . $post['PostID'] . "'>Read More</a>" : htmlspecialchars($post['Content']); ?>
+                    </p>
+                    
+                    <div class="d-flex justify-content-between info-margin">
+                        <span class="color-primary"><?= htmlspecialchars($post['Category']) ?></span>
+                        <span class="color-primary"><?= date("F j, Y", strtotime($post['DateCreated'])) ?></span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span><?= htmlspecialchars($post['CommentCount']) ?> comments</span>
+                        <span>by <?= htmlspecialchars($post['Username']) ?></span>
+                    </div>
+                </article>
+            <?php endforeach; ?>
         </div>
 
-<!-- Pagination -->
-<div class="row prev-next-margin">
-    <div class="prev-next-wrapper">
-        <a href="#" class="mb-2 pg-btn pg-btn-primary prev-next disabled prev-next-gap">Prev</a>
-        <a href="#" class="mb-2 pg-btn pg-btn-primary prev-next">Next</a>
-    </div>
-    <div class="page-wrapper">
-        <span class="d-inline-block mr-3">Page</span>
-        <nav class="paging-nav d-inline-block">
-            <ul>
-                <li class="pg-num active"><a href="#" class="mb-2 pg-btn pg-num-link">1</a></li>
-                <li class="pg-num"><a href="#" class="mb-2 pg-btn pg-num-link">2</a></li>
-                <li class="pg-num"><a href="#" class="mb-2 pg-btn pg-num-link">3</a></li>
-                <li class="pg-num"><a href="#" class="mb-2 pg-btn pg-num-link">4</a></li>
-            </ul>
-        </nav>
-    </div>
-</div>
-
-</main>
+        <!-- Pagination -->
+        <div class="row prev-next-margin">
+            <div class="prev-next-wrapper">
+                <a href="?page=<?= max(1, $currentPage - 1) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage <= 1 ? 'disabled' : '' ?> prev-next-gap">Prev</a>
+                <a href="?page=<?= min($totalPages, $currentPage + 1) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">Next</a>
+            </div>
+            <div class="page-wrapper">
+                <span class="d-inline-block mr-3">Page</span>
+                <nav class="paging-nav d-inline-block">
+                    <ul>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="pg-num <?= $i === $currentPage ? 'active' : '' ?>">
+                                <a href="?page=<?= $i ?>" class="mb-2 pg-btn pg-num-link"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </main>
 </div>
 
 <?php include 'activity/footer.php'; ?>

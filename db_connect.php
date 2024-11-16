@@ -8,18 +8,27 @@
 
 ****************/
 
-define('DB_DSN', 'mysql:host=localhost;dbname=wpgfit;charset=utf8');
-define('DB_USER', 'root');
-define('DB_PASS', '');     
+// Prevent constant redefinition
+if (!defined('DB_DSN')) {
+    define('DB_DSN', 'mysql:host=localhost;dbname=wpgfit;charset=utf8');
+}
+if (!defined('DB_USER')) {
+    define('DB_USER', 'root');
+}
+if (!defined('DB_PASS')) {
+    define('DB_PASS', '');
+}
 
 try {
-    // Try creating a new PDO connection to MySQL
+    // Create a new PDO connection to MySQL
     $db = new PDO(DB_DSN, DB_USER, DB_PASS);
     // Enable exceptions for error handling
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
+    // Print error message and stop execution
     print "Error: " . $e->getMessage();
-    die(); // Force execution to stop on errors
-    // When deploying to production, handle errors more gracefully ¯\_(ツ)_/¯
+    die(); 
+    // Note: For production, use a secure error logging method instead of printing to the user
 }
+
 ?>
