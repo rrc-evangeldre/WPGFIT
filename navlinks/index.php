@@ -2,15 +2,15 @@
 /*******w******** 
     Name: Raphael Evangelista
     Date: November 12, 2024
-    Description: Updated to filter posts by both category and search keyword.
+    Description: Updated to include enhanced pagination for search results.
 ****************/
 
 session_start();
 include '../activity/db_connect.php';
 include '../activity/header.php';
 
-// Define the number of posts per page
-$postsPerPage = 6;
+// Posts per page
+$postsPerPage = isset($_GET['n']) ? (int)$_GET['n'] : 6;
 
 // Get the current page from the URL
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -145,24 +145,26 @@ $defaultImagePath = '../img/defaultimage.png';
         </div>
 
         <!-- Pagination -->
-        <div class="row prev-next-margin">
-            <div class="prev-next-wrapper">
-                <a href="?page=<?= max(1, $currentPage - 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage <= 1 ? 'disabled' : '' ?> prev-next-gap">Prev</a>
-                <a href="?page=<?= min($totalPages, $currentPage + 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">Next</a>
+        <?php if ($totalPages > 1): ?>
+            <div class="row prev-next-margin">
+                <div class="prev-next-wrapper">
+                    <a href="?page=<?= max(1, $currentPage - 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage <= 1 ? 'disabled' : '' ?> prev-next-gap">Prev</a>
+                    <a href="?page=<?= min($totalPages, $currentPage + 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">Next</a>
+                </div>
+                <div class="page-wrapper">
+                    <span class="d-inline-block mr-3">Page</span>
+                    <nav class="paging-nav d-inline-block">
+                        <ul>
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="pg-num <?= $i === $currentPage ? 'active' : '' ?>">
+                                    <a href="?page=<?= $i ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-num-link"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <div class="page-wrapper">
-                <span class="d-inline-block mr-3">Page</span>
-                <nav class="paging-nav d-inline-block">
-                    <ul>
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="pg-num <?= $i === $currentPage ? 'active' : '' ?>">
-                                <a href="?page=<?= $i ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-num-link"><?= $i ?></a>
-                            </li>
-                        <?php endfor; ?>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <?php endif; ?>
     </main>
 </div>
 
