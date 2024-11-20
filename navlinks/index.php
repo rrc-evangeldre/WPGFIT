@@ -2,7 +2,7 @@
 /*******w******** 
     Name: Raphael Evangelista
     Date: November 12, 2024
-    Description: Enhanced to clear search query when changing categories or selecting "All Categories."
+    Description: Updated to filter posts by both category and search keyword.
 ****************/
 
 session_start();
