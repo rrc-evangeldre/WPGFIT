@@ -1,10 +1,8 @@
 <?php  
 /*******w******** 
- 
     Name: Raphael Evangelista
     Date: November 14, 2024
     Description: Create a new post with this page.
-    
 ****************/
 
 include '../activity/db_connect.php';
@@ -13,7 +11,8 @@ include '../activity/header.php';
 // Makes sure the user is logged in before allowing them to post
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-}if (!isset($_SESSION['user_id'])) {
+}
+if (!isset($_SESSION['user_id'])) {
     // Redirect to login page with a message if the user is not logged in
     $_SESSION['login_error'] = "You must be logged in to make a post.";
     header("Location: ../logins/login.php");
@@ -43,21 +42,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userID = $_SESSION['user_id']; // Get the logged-in user's ID
     $visibility = 'Public';
 
-    // Handle file upload
     if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../uploads/';
-        $filePath = $uploadDir . basename($_FILES['file']['name']);
+        // Uploads directory
+        $uploadDir = realpath(__DIR__ . '/../uploads/') . '/'; // Absolute path
+        $fileName = basename($_FILES['file']['name']);
+        $filePath = $uploadDir . $fileName; // Full path for saving the file
 
-        // Validate file type
+        // Validate file type **Added debugging
         if (file_is_allowed($_FILES['file']['tmp_name'], $filePath)) {
             // Move the uploaded file to the "uploads" directory
-            if (!move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
-                $uploadError = 'File upload failed.';
+            if (move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+                // Store relative path for database storage
+                $filePath = '../uploads/' . $fileName;
+            } else {
+                $uploadError = 'File upload failed. Ensure the uploads directory exists and has write permissions.';
+                $filePath = null;
             }
         } else {
             $uploadError = "Invalid file type. Only JPG, PNG, and GIF files are allowed.";
-            $filePath = null;  // Set filePath to null if file is not allowed
+            $filePath = null;
         }
+    } elseif (!empty($_FILES['file']['error']) && $_FILES['file']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $uploadError = 'File upload error occurred.';
     }
 
     // Only insert into the database if there's no upload error
@@ -96,20 +102,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="description" class="form-control" id="description" placeholder="body text (optional)">
       </div>
       <div class="post-group">
-      <div class="checkbox-group">
-        <input type="checkbox" id="general" name="category[]" value="General" checked> General
-        <input type="checkbox" id="advice" name="category[]" value="Advice"> Advice
-        <input type="checkbox" id="question" name="category[]" value="Question"> Question
-        <input type="checkbox" id="discussion" name="category[]" value="Discussion"> Discussion
-        <input type="checkbox" id="cardio" name="category[]" value="Cardio"> Cardio
-        <input type="checkbox" id="strength" name="category[]" value="Strength"> Strength
-        <input type="checkbox" id="nutrition" name="category[]" value="Nutrition"> Nutrition
-        <input type="checkbox" id="progress" name="category[]" value="Progress"> Progress
-      </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="general" name="category[]" value="General" checked> General
+          <input type="checkbox" id="advice" name="category[]" value="Advice"> Advice
+          <input type="checkbox" id="question" name="category[]" value="Question"> Question
+          <input type="checkbox" id="discussion" name="category[]" value="Discussion"> Discussion
+          <input type="checkbox" id="cardio" name="category[]" value="Cardio"> Cardio
+          <input type="checkbox" id="strength" name="category[]" value="Strength"> Strength
+          <input type="checkbox" id="nutrition" name="category[]" value="Nutrition"> Nutrition
+          <input type="checkbox" id="progress" name="category[]" value="Progress"> Progress
+        </div>
       </div>
       <hr>
       <div class="post-group mt-3">
-        <label class="mr-2">Upload your files:</label>
+        <label class="mr-2">Upload your file (optional):</label>
         <input type="file" name="files[]" multiple>
       </div>
       <hr>

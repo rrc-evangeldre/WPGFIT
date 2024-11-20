@@ -2,15 +2,15 @@
 /*******w******** 
     Name: Raphael Evangelista
     Date: November 12, 2024
-    Description: Updated to filter posts by both category and search keyword.
+    Description: Enhanced to clear search query when changing categories or selecting "All Categories."
 ****************/
 
 session_start();
 include '../activity/db_connect.php';
 include '../activity/header.php';
 
-// Define the number of posts per page
-$postsPerPage = 6;
+// Posts per page
+$postsPerPage = isset($_GET['n']) ? (int)$_GET['n'] : 6;
 
 // Get the current page from the URL
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -86,9 +86,9 @@ $defaultImagePath = '../img/defaultimage.png';
         <!-- Search form with Category Dropdown -->
         <div class="row">
             <div class="col-12">
-                <form method="GET" class="form-inline search-form d-flex align-items-center">
+                <form method="GET" class="form-inline search-form d-flex align-items-center" id="filterForm">
                     <!-- Category Dropdown -->
-                    <select name="category" class="form-control mr-2">
+                    <select name="category" class="form-control mr-2" id="categoryDropdown" onchange="clearSearchQuery()">
                         <option value="all" <?= $selectedCategory === 'all' || empty($selectedCategory) ? 'selected' : '' ?>>All Categories</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?= htmlspecialchars($category) ?>" <?= $selectedCategory === $category ? 'selected' : '' ?>><?= htmlspecialchars($category) ?></option>
@@ -96,7 +96,7 @@ $defaultImagePath = '../img/defaultimage.png';
                     </select>
 
                     <!-- Search Bar -->
-                    <input class="form-control search-input" name="query" type="text" placeholder="Search..." aria-label="Search" value="<?= htmlspecialchars($searchQuery) ?>">
+                    <input class="form-control search-input" name="query" id="searchQuery" type="text" placeholder="Search..." aria-label="Search" value="<?= htmlspecialchars($searchQuery) ?>">
                     <button class="search-button" type="submit">
                         <i class="fas fa-search search-icon" aria-hidden="true"></i>
                     </button>                                 
@@ -129,7 +129,11 @@ $defaultImagePath = '../img/defaultimage.png';
                         
                         <div class="d-flex justify-content-between info-margin">
                             <!-- Display category name -->
-                            <span class="color-primary"><?= htmlspecialchars($post['Category']) ?></span>
+                            <span class="color-primary">
+                                <a href="?category=<?= urlencode($post['Category']) ?>&query=<?= urlencode($searchQuery) ?>&n=<?= $postsPerPage ?>" class="category-link">
+                                    <?= htmlspecialchars($post['Category']) ?>
+                                </a>
+                            </span>
                             <span class="color-primary"><?= date("F j, Y", strtotime($post['DateCreated'])) ?></span>
                         </div>
                         <hr>
@@ -145,25 +149,34 @@ $defaultImagePath = '../img/defaultimage.png';
         </div>
 
         <!-- Pagination -->
-        <div class="row prev-next-margin">
-            <div class="prev-next-wrapper">
-                <a href="?page=<?= max(1, $currentPage - 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage <= 1 ? 'disabled' : '' ?> prev-next-gap">Prev</a>
-                <a href="?page=<?= min($totalPages, $currentPage + 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">Next</a>
+        <?php if ($totalPages > 1): ?>
+            <div class="row prev-next-margin">
+                <div class="prev-next-wrapper">
+                    <a href="?page=<?= max(1, $currentPage - 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage <= 1 ? 'disabled' : '' ?> prev-next-gap">Prev</a>
+                    <a href="?page=<?= min($totalPages, $currentPage + 1) ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-btn-primary prev-next <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">Next</a>
+                </div>
+                <div class="page-wrapper">
+                    <span class="d-inline-block mr-3">Page</span>
+                    <nav class="paging-nav d-inline-block">
+                        <ul>
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="pg-num <?= $i === $currentPage ? 'active' : '' ?>">
+                                    <a href="?page=<?= $i ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>&n=<?= $postsPerPage ?>" class="mb-2 pg-btn pg-num-link"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <div class="page-wrapper">
-                <span class="d-inline-block mr-3">Page</span>
-                <nav class="paging-nav d-inline-block">
-                    <ul>
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="pg-num <?= $i === $currentPage ? 'active' : '' ?>">
-                                <a href="?page=<?= $i ?>&query=<?= urlencode($searchQuery) ?>&category=<?= urlencode($selectedCategory) ?>" class="mb-2 pg-btn pg-num-link"><?= $i ?></a>
-                            </li>
-                        <?php endfor; ?>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <?php endif; ?>
     </main>
 </div>
+
+<script>
+    function clearSearchQuery() {
+        document.getElementById('searchQuery').value = '';
+        document.getElementById('filterForm').submit();
+    }
+</script>
 
 <?php include '../activity/footer.php'; ?>
