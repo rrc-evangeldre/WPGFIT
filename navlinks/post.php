@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <hr>
       <div class="post-group mt-3">
         <label class="mr-2">Upload your files:</label>
-        <input type="file" name="file">
+        <input type="file" name="files[]" multiple>
       </div>
       <hr>
 
