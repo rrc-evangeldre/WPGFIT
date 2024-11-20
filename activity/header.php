@@ -15,23 +15,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // Set page title and active state
 switch ($current_page) {
-    case 'login.php':
+    case '../logins/login.php':
         $page_title = "WPG FIT | Login";
         $active_page = 'login';
         break;
-    case 'post.php':
+    case '../navlinks/post.php':
         $page_title = "WPG FIT | Post";
         $active_page = 'post';
         break;
-    case 'friends_groups.php':
+    case '../navlinks/friends_groups.php':
         $page_title = "WPG FIT | Friends and Groups";
         $active_page = 'friends_groups';
         break;
-    case 'leaderboard.php':
+    case '../navlinks/leaderboard.php':
         $page_title = "WPG FIT | Leaderboard";
         $active_page = 'leaderboard';
         break;
-    case 'profile.php':
+    case '../navlinks/profile.php':
         $page_title = "WPG FIT | Profile";
         $active_page = 'profile';
         break;
@@ -48,11 +48,11 @@ switch ($current_page) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/11517d5e6e.js" crossorigin="anonymous"></script>
-    <link rel="icon" href="img/wpgfit.png" type="image/png">
+    <link rel="icon" href="../img/wpgfit.png" type="image/png">
     <title><?php echo $page_title; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mainstyle.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/mainstyle.css" rel="stylesheet">
 </head>
 <body>
     <header class="header" id="header">
@@ -61,27 +61,27 @@ switch ($current_page) {
                 <i class="fas fa-bars"></i>
             </button>
             <div class="site-logo">
-                <img src="img/wpgfit.png" alt="Image" class="img-fluid">                            
+                <img src="../img/wpgfit.png" alt="Image" class="img-fluid">                            
             </div>
             <nav class="side-nav" id="side-nav">            
                 <ul>
                     <li class="side-nav-item <?php if($active_page == 'home') echo 'active'; ?>">
-                        <a href="index.php" class="side-nav-link">
+                        <a href="../navlinks/index.php" class="side-nav-link">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
                     <li class="side-nav-item <?php if($active_page == 'post') echo 'active'; ?>">
-                        <a href="post.php" class="side-nav-link">
+                        <a href="../navlinks/post.php" class="side-nav-link">
                             <i class="fas fa-pen"></i> Post
                         </a>
                     </li>
                     <li class="side-nav-item <?php if($active_page == 'friends_groups') echo 'active'; ?>">
-                        <a href="friends_groups.php" class="side-nav-link">
+                        <a href="../navlinks/friends_groups.php" class="side-nav-link">
                             <i class="fas fa-users"></i> Friends and Groups
                         </a>
                     </li>
                     <li class="side-nav-item <?php if($active_page == 'leaderboard') echo 'active'; ?>">
-                        <a href="leaderboard.php" class="side-nav-link">
+                        <a href="../navlinks/leaderboard.php" class="side-nav-link">
                             <i class="fa-brands fa-flipboard fa-rotate-180"></i> Leaderboard
                         </a>
                     </li>
@@ -89,19 +89,19 @@ switch ($current_page) {
                     <?php if(isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true): ?>
                         <!-- My Account and Log Out links for logged-in users -->
                         <li class="side-nav-item <?php if($active_page == 'profile') echo 'active'; ?>">
-                            <a href="profile.php" class="side-nav-link">
+                            <a href="../navlinks/profile.php" class="side-nav-link">
                                 <i class="fas fa-user"></i> My Account
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="logout.php" class="side-nav-link">
+                            <a href="../logins/logout.php" class="side-nav-link">
                                 <i class="fas fa-sign-out-alt"></i> Log Out
                             </a>
                         </li>
                     <?php else: ?>
                         <!-- Sign In link for guests -->
                         <li class="side-nav-item <?php if($active_page == 'login') echo 'active'; ?>">
-                            <a href="login.php" class="side-nav-link">
+                            <a href="../logins/login.php" class="side-nav-link">
                                 <i class="fa fa-sign-in"></i> Sign In
                             </a>
                         </li>

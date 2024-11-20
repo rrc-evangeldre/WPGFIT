@@ -519,6 +519,18 @@ ul {
 	border-radius: 15px; 
   }
 
+/* Container for the checkbox group */
+.checkbox-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px; /* Adds space between each checkbox */
+  }
+  
+  /* Style for each checkbox */
+  .checkbox-group input {
+	margin-right: -5px; /* Adds vertical space between checkboxes on the same row */
+  }
+  
 /* Single Posts */
 hr.post-separator { border-top: 5px solid #00ccff; }
 
@@ -543,7 +555,7 @@ img.img-fluid {
 }
 
 /* For default image */
-img[src="img/defaultimage.png"] {
+img[src="../img/defaultimage.png"] {
 	margin-top: -20px;
 	margin-left: 45px;
     height: 250px;
