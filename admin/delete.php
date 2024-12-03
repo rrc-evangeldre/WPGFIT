@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
         // no message yet ***
         if ($deleteStmt->execute()) {
-            header("Location: index.php?message=PostDeleted");
+            header("Location: ../navlinks/index.php?message=PostDeleted");
             exit;
         } else {
             echo "Error deleting post.";

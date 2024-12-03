@@ -577,3 +577,39 @@ img[src="../img/defaultimage.png"] {
 .edit-button a:hover {
     color: #0d809c;  /* Darker green when hovered */
 }
+
+/* Styling for category dropdown and search bar */
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-form .dropdown {
+    margin-right: 10px; /* Space between dropdown and search bar */
+}
+
+.search-form .search-input {
+    flex-grow: 1; /* Allow search input to take available space */
+    max-width: 300px; /* Adjust the width of the search input */
+}
+
+.search-form .search-button {
+    margin-left: 10px; /* Space between input and button */
+}
+
+.search-form .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Comments */
+#regenerate-captcha {
+    background-color: #00ccff;  /* Custom background color */
+    border-color: #ffffff;      /* Custom border color */
+    color: white;               /* Custom text color */
+}
+
+#regenerate-captcha:hover {
+    background-color: #0056b3;  /* Background color on hover */
+    border-color: #0056b3;      /* Border color on hover */
+}
