@@ -80,7 +80,7 @@ if (isset($_GET['postid'])) {
                                 <div class="comment mb-3">
                                     <strong><?= htmlspecialchars($comment['username']); ?>:</strong>
                                     <p><?= htmlspecialchars($comment['comment_text']); ?></p>
-                                    <small><?= $comment['created_at']; ?></small>
+                                    <small><?= date('Y-m-d H:i', strtotime($comment['created_at'])); ?></small>
                                 </div>
                             <?php endforeach;
                         } else {
