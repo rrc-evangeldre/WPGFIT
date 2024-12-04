@@ -29,21 +29,9 @@ if (isset($_GET['postid'])) {
             $roles = [];
         }
 
-        // Check if the logged-in user is the post author or an Admin
-        $isEditable = isset($_SESSION['user_id']) && 
-                      ($_SESSION['user_id'] == $post['UserID'] || 
-                      in_array('Admin', $roles));
         ?>
         <div class="container mt-5">
             <div class="post-container position-relative p-4 border rounded">
-                <!-- Edit Button (only for the author or admins) -->
-                <?php if ($isEditable): ?>
-                <div class="edit-button">
-                    <!-- Edit button -->
-                    <a href="../admin/edit.php?postid=<?= $postId ?>" class="fa-solid fa-pen-to-square"></a>
-                </div>
-                <?php endif; ?>
-
                 <!-- Post Content -->
                 <h1><?= htmlspecialchars($post['Title']) ?></h1>
                 <p class="post-meta">By <?= htmlspecialchars($post['Username']) ?> | <?= date('F j, Y', strtotime($post['DateCreated'])) ?></p>
@@ -66,7 +54,7 @@ if (isset($_GET['postid'])) {
                     <div id="comments-list">
                         <?php
                         // Fetch comments related to the current post
-                        $commentsQuery = "SELECT c.*, u.username 
+                        $commentsQuery = "SELECT c.commentid, c.comment_text, c.created_at, c.userid, u.username 
                                           FROM comments c 
                                           JOIN users u ON c.userid = u.userid 
                                           WHERE c.postid = :postid 
@@ -77,8 +65,15 @@ if (isset($_GET['postid'])) {
 
                         if ($comments) {
                             foreach ($comments as $comment): ?>
-                                <div class="comment mb-3">
-                                    <strong><?= htmlspecialchars($comment['username']); ?>:</strong>
+                                <div class="comment mb-3" id="comment-<?= $comment['commentid']; ?>">
+                                    <strong>
+                                        <?= htmlspecialchars($comment['username']); ?>
+                                        <?php if (in_array('Admin', $roles)): ?>
+                                            <button class="btn btn-sm delete-comment" data-id="<?= $comment['commentid']; ?>" title="Delete Comment">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                    </strong>
                                     <p><?= htmlspecialchars($comment['comment_text']); ?></p>
                                     <small><?= date('Y-m-d H:i', strtotime($comment['created_at'])); ?></small>
                                 </div>
@@ -121,7 +116,7 @@ if (isset($_GET['postid'])) {
             </div>
         </div>
 
-        <!-- AJAX for Comment Submission -->
+        <!-- AJAX for Comment Submission and Deletion -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
         $(document).ready(function() {
@@ -159,8 +154,14 @@ if (isset($_GET['postid'])) {
                         if (data.success) {
                             // Append the new comment to the comments list
                             $('#comments-list').prepend(`
-                                <div class="comment mb-3">
-                                    <strong>${data.username}:</strong>
+                                <div class="comment mb-3" id="comment-${data.comment_id}">
+                                    <strong>${data.username}
+                                        <?php if (in_array('Admin', $roles)): ?>
+                                            <button class="btn btn-sm delete-comment" data-id="${data.comment_id}" title="Delete Comment">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                    </strong>
                                     <p>${data.comment_text}</p>
                                     <small>${data.created_at}</small>
                                 </div>
@@ -180,6 +181,35 @@ if (isset($_GET['postid'])) {
                 });
             });
 
+            // Handle delete comment via AJAX
+            $(document).on('click', '.delete-comment', function() {
+                var commentId = $(this).data('id');
+                
+                // AJAX request to delete comment
+                $.ajax({
+                    url: '../activity/manage_comment.php',
+                    type: 'POST',
+                    data: {
+                        action: 'delete',
+                        commentid: commentId
+                    },
+                    success: function(response) {
+                        try {
+                            var data = JSON.parse(response);
+
+                            if (data.success) {
+                                $('#comment-' + commentId).remove();
+                            } else {
+                                alert(data.message);
+                            }
+                        } catch (e) {
+                            console.error("Invalid JSON response from server:", response);
+                            alert("An error occurred while trying to delete the comment.");
+                        }
+                    }
+                });
+            });
+
             // Handle CAPTCHA regeneration
             $('#regenerate-captcha').click(function() {
                 regenerateCaptcha();
@@ -193,7 +223,6 @@ if (isset($_GET['postid'])) {
         </script>
 
         <?php
-        // Troubleshooting
     } else {
         // If the post is not found
         echo "<p class='text-center mt-5'>Post not found.</p>";
