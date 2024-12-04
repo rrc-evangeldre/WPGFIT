@@ -31,20 +31,21 @@ if (isset($_GET['postid'])) {
 
         // Check if the logged-in user is the post author or an Admin
         $isEditable = isset($_SESSION['user_id']) && 
-        ($_SESSION['user_id'] == $post['UserID'] || 
-        in_array('Admin', $roles));
-
+                      ($_SESSION['user_id'] == $post['UserID'] || 
+                      in_array('Admin', $roles));
         ?>
         <div class="container mt-5">
             <div class="post-container position-relative p-4 border rounded">
-                <!-- Post Title with Edit Button (only for the author or admins) -->
-                <div class="post-header d-flex align-items-center">
-                    <h1 class="flex-grow-1"><?= htmlspecialchars($post['Title']) ?></h1>
-                    <?php if ($isEditable): ?>
-                        <a href="../admin/edit.php?postid=<?= $postId ?>" class="fa-solid fa-pen-to-square edit-button ml-2" title="Edit Post"></a>
-                    <?php endif; ?>
+                <!-- Edit Button (only for the author or admins) -->
+                <?php if ($isEditable): ?>
+                <div class="edit-button">
+                    <!-- Edit button -->
+                    <a href="../admin/edit.php?postid=<?= $postId ?>" class="fa-solid fa-pen-to-square"></a>
                 </div>
+                <?php endif; ?>
 
+                <!-- Post Content -->
+                <h1><?= htmlspecialchars($post['Title']) ?></h1>
                 <p class="post-meta">By <?= htmlspecialchars($post['Username']) ?> | <?= date('F j, Y', strtotime($post['DateCreated'])) ?></p>
                 
                 <!-- Display image if it exists -->
@@ -234,7 +235,7 @@ if (isset($_GET['postid'])) {
         </script>
 
         <?php
-        //Troubleshooting
+        // Troubleshooting
     } else {
         echo "<p class='text-center mt-5'>Post not found.</p>";
     }
