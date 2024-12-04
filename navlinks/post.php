@@ -64,7 +64,7 @@ function resize_image($source_path, $destination_path, $max_height) {
 
     $new_image = imagecreatetruecolor($new_width, $new_height);
 
-    // Preserve transparency for PNG and GIF
+    // Transparency for PNG and GIF
     if ($mime_type == 'image/png' || $mime_type == 'image/gif') {
         imagecolortransparent($new_image, imagecolorallocatealpha($new_image, 0, 0, 0, 127));
         imagealphablending($new_image, false);
@@ -105,11 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__ . '/../uploads/'; // Set upload directory
 
-        // Ensure the upload directory exists
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true); // Create directory if it does not exist
-        }
-
         // Add a timestamp to prevent file overwriting
         $fileName = time() . '_' . basename($_FILES['file']['name']);
         $targetFilePath = $uploadDir . $fileName;
@@ -119,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Resize the image and move it to the target directory
             $resized = resize_image($_FILES['file']['tmp_name'], $targetFilePath, 220); // Set height to 220px
             if ($resized) {
-                // Set filePath to be relative for accessing it correctly in your project
+                // Set filePath to be relative for accessing it correctly
                 $filePath = '../uploads/' . $fileName;
             } else {
                 $uploadError = 'Error occurred while resizing and moving the uploaded file.';
