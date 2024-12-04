@@ -1,4 +1,4 @@
-<?php  
+<?php
 /*******w******** 
     Name: Raphael Evangelista
     Date: November 14, 2024
@@ -121,6 +121,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<!-- TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/ctiai9wqjk73i9rw7xilic60291laiu79yydw9n8uts9y9vm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#description',
+        plugins: 'link image code lists',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+        height: 300,
+        menubar: false
+    });
+</script>
+
 <div class="container mt-5">
   <div class="post-container p-4 border rounded">
     <form accept-charset="UTF-8" action="" method="POST" enctype="multipart/form-data">
@@ -130,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="post-group">
         <label for="description">Description</label>
-        <input type="text" name="description" class="form-control" id="description" value="<?= htmlspecialchars($post['Content']) ?>">
+        <textarea name="description" id="description" class="form-control"><?= htmlspecialchars($post['Content']) ?></textarea>
       </div>
       <div class="post-group">
         <label>Add Tags (optional)</label><br>

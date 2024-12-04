@@ -1,8 +1,10 @@
 <?php
 /*******w******** 
+  
     Name: Raphael Evangelista
     Date: November 12, 2024
     Description: Updated to filter posts by both category and search keyword.
+
 ****************/
 
 session_start();
@@ -41,7 +43,6 @@ if (!empty($selectedCategory) && $selectedCategory !== 'all') {
     $conditions[] = "FIND_IN_SET(:selectedCategory, TRIM(BOTH ' ' FROM Posts.Category)) > 0";
     $params[':selectedCategory'] = $selectedCategory;
 }
-
 
 if (!empty($conditions)) {
     $sql .= " WHERE " . implode(" AND ", $conditions);
@@ -82,6 +83,7 @@ $categoryQuery->execute();
 $categories = $categoryQuery->fetchAll(PDO::FETCH_COLUMN);
 
 $defaultImagePath = '../img/defaultimage.png';
+
 ?>
 
 <div class="container-fluid">
@@ -127,7 +129,16 @@ $defaultImagePath = '../img/defaultimage.png';
                         
                         <!-- Post Description -->
                         <p class="post-description">
-                            <?= strlen($post['Content']) > 50 ? htmlspecialchars(substr($post['Content'], 0, 50)) . "... <a href='single_post.php?postid=" . $post['PostID'] . "'>Read More</a>" : htmlspecialchars($post['Content']); ?>
+                            <?php
+                            // Strip tags to avoid issues with WYSIWYG content
+                            $content = strip_tags($post['Content']);
+                            if (strlen($content) > 50) {
+                                echo htmlspecialchars(substr($content, 0, 50)) . "...";
+                                echo " <a href='single_post.php?postid=" . $post['PostID'] . "' class='read-more-link'>Read More</a>";
+                            } else {
+                                echo htmlspecialchars($content);
+                            }
+                            ?>
                         </p>
                         
                         <div class="d-flex justify-content-between info-margin">

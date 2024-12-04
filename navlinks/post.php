@@ -25,8 +25,8 @@ $uploadError = '';
 
 // Function to check file MIME type and extension
 function file_is_allowed($temporary_path, $new_path) {
-    $allowed_mime_types = ['image/gif', 'image/jpeg', 'image/png'];  // Allowed image MIME types
-    $allowed_file_extensions = ['gif', 'jpg', 'jpeg', 'png'];  // Allowed file extensions
+    $allowed_mime_types = ['image/gif', 'image/jpeg', 'image/png'];
+    $allowed_file_extensions = ['gif', 'jpg', 'jpeg', 'png'];
 
     $actual_file_extension = strtolower(pathinfo($new_path, PATHINFO_EXTENSION));
     $actual_mime_type = mime_content_type($temporary_path);
@@ -97,8 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the form fields
     $title = $_POST['title'] ?? '';
     $description = $_POST['description'] ?? '';
-    $categories = $_POST['category'] ?? []; // Categories are stored as an array
-    $userID = $_SESSION['user_id']; // Get the logged-in user's ID
+    $categories = $_POST['category'] ?? [];
+    $userID = $_SESSION['user_id'];
     $visibility = 'Public';
 
     // Check if a file was uploaded
@@ -136,19 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':description' => $description,
                 ':category' => 'General', // Default value
                 ':visibility' => $visibility,
-                ':filePath' => $filePath
+                ':filePath' => $filePath // Save the file path properly
             ]);
-            
-            $postId = $db->lastInsertId(); // Get the ID of the inserted post
-
-            // Insert categories into the postcategories table
-            foreach ($categories as $category) {
-                $categoryStmt = $db->prepare("INSERT INTO PostCategories (PostID, CategoryID) VALUES (:postID, :categoryID)");
-                $categoryStmt->execute([
-                    ':postID' => $postId,
-                    ':categoryID' => $category
-                ]);
-            }
 
             // Redirect to index page after successful post creation
             header("Location: index.php");
@@ -169,7 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="post-group">
         <label for="description">Description</label>
-        <input type="text" name="description" class="form-control" id="description" placeholder="body text (optional)">
+        <!-- Changed to textarea for TinyMCE integration -->
+        <textarea name="description" class="form-control" id="description" rows="10" placeholder="Body text (optional)"></textarea>
       </div>
       <div class="post-group">
         <div class="checkbox-group">
@@ -199,5 +189,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
   </div>
 </div>
+
+<!-- TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/ctiai9wqjk73i9rw7xilic60291laiu79yydw9n8uts9y9vm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#description',
+        plugins: 'link image code lists',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+        height: 300,
+        menubar: false
+    });
+</script>
 
 <script src="../js/post.js"></script>

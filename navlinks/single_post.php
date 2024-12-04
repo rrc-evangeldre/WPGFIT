@@ -56,9 +56,8 @@ if (isset($_GET['postid'])) {
                 <?php endif; ?>
 
                 <div class="post-content mt-3">
-                    <?= nl2br(htmlspecialchars($post['Content'])) ?>
+                    <?= nl2br($post['Content']) ?>
                 </div>
-                <hr>
 
                 <!-- Comments Section -->
                 <div class="comments-section mt-5">
@@ -197,7 +196,7 @@ if (isset($_GET['postid'])) {
             $(document).on('click', '.delete-comment', function() {
                 var commentId = $(this).data('id');
                 
-                // AJAX request to delete comment
+                // AJAX request to delete comment, added troubleshooting
                 $.ajax({
                     url: '../activity/manage_comment.php',
                     type: 'POST',

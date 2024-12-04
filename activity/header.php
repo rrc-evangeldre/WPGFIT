@@ -1,10 +1,10 @@
 <?php
 /*******w******** 
-        
+ * 
     Name: Raphael Evangelista
     Date: November 11, 2024
     Description: This is the header template that manages session start, page titles, and active state for navigation.
-
+    
 ****************/
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -15,23 +15,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // Set page title and active state
 switch ($current_page) {
-    case '../logins/login.php':
+    case 'login.php':
         $page_title = "WPG FIT | Login";
         $active_page = 'login';
         break;
-    case '../navlinks/post.php':
+    case 'post.php':
         $page_title = "WPG FIT | Post";
         $active_page = 'post';
         break;
-    case '../navlinks/friends_groups.php':
+    case 'friends_groups.php':
         $page_title = "WPG FIT | Friends and Groups";
         $active_page = 'friends_groups';
         break;
-    case '../navlinks/leaderboard.php':
+    case 'leaderboard.php':
         $page_title = "WPG FIT | Leaderboard";
         $active_page = 'leaderboard';
         break;
-    case '../navlinks/profile.php':
+    case 'profile.php':
         $page_title = "WPG FIT | Profile";
         $active_page = 'profile';
         break;
