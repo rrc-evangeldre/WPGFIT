@@ -1,37 +1,77 @@
-<?php 
+<?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include '../activity/header.php';
+
+// Redirect non-admin users to another page
+if (!isset($_SESSION['role']) || !in_array('Admin', (array)$_SESSION['role'])) {
+    $_SESSION['error_message'] = "You do not have permission to access the admin page.";
+    header("Location: ../index.php");
+    exit();
+}
 ?>
+
+<!-- Message Container -->
+<div class="message-container">
+    <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success"><?php echo $_SESSION['success_message']; ?></div>
+        <?php unset($_SESSION['success_message']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['register_error'])): ?>
+        <div class="alert alert-danger"><?php echo $_SESSION['register_error']; ?></div>
+        <?php unset($_SESSION['register_error']); ?>
+    <?php endif; ?>
+</div>
 
 <section class="forms-section">
     <div class="forms">
         <!-- Add User Form -->
         <div class="form-wrapper is-active">
             <button type="button" class="switcher switcher-add-user">Add User <span class="underline"></span></button>
-            <form class="form form-add-user" action="add_user.php" method="POST">
+            <form class="form form-add-user" action="../logins/register.php" method="POST">
                 <fieldset>
                     <legend>Enter user information to add a new user.</legend>
-                    <div class="input-block">
-                        <label for="user-name">Username</label>
-                        <input id="user-name" name="username" type="text" required>
+                    <div class="admin-input-block">
+                        <label for="add-username">Username</label>
+                        <input id="add-username" name="username" type="text" autocomplete="off" required>
                     </div>
-                    <div class="input-block">
-                        <label for="user-email">Email</label>
-                        <input id="user-email" name="email" type="email" required>
+                    <div class="admin-input-block">
+                        <label for="add-email">Email</label>
+                        <input id="add-email" name="email" type="email" autocomplete="off" required>
                     </div>
-                    <div class="input-block">
-                        <label for="user-role">Role</label>
-                        <select id="user-role" name="role" required>
-                            <option value="Admin">Admin</option>
-                            <option value="Member">Member</option>
-                            <option value="Professional">Professional</option>
-                            <option value="Influencer">Influencer</option>
-                        </select>
+                    <div class="admin-input-block">
+                        <label for="add-password">Password</label>
+                        <input id="add-password" name="password" type="password" autocomplete="new-password" required>
+                    </div>
+                    <div class="admin-input-block">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input id="confirm-password" name="password_confirm" type="password" autocomplete="new-password" required>
+                    </div>
+                    <div class="admin-input-block">
+                        <label for="add-roles">Roles</label>
+                        <div class="checkbox-group">
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="roles[]" value="Admin"> Admin
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="roles[]" value="Professional"> Professional
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" name="roles[]" value="Influencer"> Influencer
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
+                <input type="hidden" name="is_admin_action" value="true">
                 <button type="submit" class="btn-add-user">Add User</button>
             </form>
         </div>
@@ -44,29 +84,10 @@ include '../activity/header.php';
                     <legend>Manage existing users.</legend>
                     <div class="input-block">
                         <label for="search-user">Search User</label>
-                        <input id="search-user" name="search" type="text">
+                        <input id="search-user" name="search" type="text" autocomplete="off">
                     </div>
                     <button type="submit" class="btn-view-users">Search</button>
                 </fieldset>
-            </form>
-        </div>
-
-        <!-- Settings Form -->
-        <div class="form-wrapper">
-            <button type="button" class="switcher switcher-settings">Settings <span class="underline"></span></button>
-            <form class="form form-settings" action="update_settings.php" method="POST">
-                <fieldset>
-                    <legend>Update system settings.</legend>
-                    <div class="input-block">
-                        <label for="site-title">Site Title</label>
-                        <input id="site-title" name="site_title" type="text" required>
-                    </div>
-                    <div class="input-block">
-                        <label for="site-description">Site Description</label>
-                        <input id="site-description" name="site_description" type="text" required>
-                    </div>
-                </fieldset>
-                <button type="submit" class="btn-settings">Save Settings</button>
             </form>
         </div>
     </div>

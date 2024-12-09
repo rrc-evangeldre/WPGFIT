@@ -1,6 +1,6 @@
 <?php
 /*******w******** 
- * 
+ 
     Name: Raphael Evangelista
     Date: November 11, 2024
     Description: This is the header template that manages session start, page titles, and active state for navigation.
@@ -108,11 +108,14 @@ switch ($current_page) {
                     <?php endif; ?>
                 </ul>
             </nav>
+
+            <!-- Admin Button -->
+            <?php if (isset($_SESSION['role']) && in_array('Admin', (array)$_SESSION['role'])): ?>
+                <a href="../admin/admin.php" class="admin-icon">
+                    <i class="fa-solid fa-people-roof"></i>
+                </a>
+            <?php endif; ?>
         </div>
     </header>
 </body>
-<!-- Popper.js and Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-
 </html>

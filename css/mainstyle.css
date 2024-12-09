@@ -228,286 +228,311 @@ ul {
 
 /* Form CSS by Max Konoval https://codepen.io/frontendmax */
 
+/* Global Reset */
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
+/* Forms Section */
 .forms-section {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: 50px;
     margin-left: 350px;
 }
 
+/* Forms Container */
 .forms {
-	display: flex;
-	align-items: flex-start;
-	margin-top: 30px;
+    display: flex;
+    align-items: flex-start;
+    margin-top: 30px;
 }
 
+/* Form Wrappers */
 .form-wrapper {
-	animation: hideLayer .3s ease-out forwards;
+    animation: hideLayer .3s ease-out forwards;
 }
 
 .form-wrapper.is-active {
-	animation: showLayer .3s ease-in forwards;
+    animation: showLayer .3s ease-in forwards;
 }
 
+/* Animations for Layer Visibility */
 @keyframes showLayer {
-	50% {
-		z-index: 1;
-	}
-	100% {
-		z-index: 1;
-	}
+    50% {
+        z-index: 1;
+    }
+    100% {
+        z-index: 1;
+    }
 }
 
 @keyframes hideLayer {
-	0% {
-		z-index: 1;
-	}
-	49.999% {
-		z-index: 1;
-	}
+    0% {
+        z-index: 1;
+    }
+    49.999% {
+        z-index: 1;
+    }
 }
 
+/* Switchers (Form Tabs) */
 .switcher {
-	position: relative;
-	cursor: pointer;
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
-	padding: 0;
-	text-transform: uppercase;
-	font-family: inherit;
-	font-size: 16px;
-	letter-spacing: .5px;
-	color: #999;
-	background-color: transparent;
-	border: none;
-	outline: none;
-	transform: translateX(0);
-	transition: all .3s ease-out;
+    position: relative;
+    cursor: pointer;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0;
+    text-transform: uppercase;
+    font-family: inherit;
+    font-size: 16px;
+    letter-spacing: .5px;
+    color: #999;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transform: translateX(0);
+    transition: all .3s ease-out;
 }
 
-.form-wrapper.is-active .switcher-login {
-	color: #00ccff;
-	transform: translateX(90px);
+.form-wrapper.is-active .switcher-login,
+.form-wrapper.is-active .switcher-add-user {
+    color: #00ccff;
+    transform: translateX(90px);
 }
 
-.form-wrapper.is-active .switcher-signup {
-	color: #00ccff;
-	transform: translateX(-90px);
+.form-wrapper.is-active .switcher-signup,
+.form-wrapper.is-active .switcher-view-users {
+    color: #00ccff;
+    transform: translateX(-90px);
 }
 
+/* Underline for Switchers */
 .underline {
-	position: absolute;
-	bottom: -5px;
-	left: 0;
-	overflow: hidden;
-	pointer-events: none;
-	width: 100%;
-	height: 2px;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    overflow: hidden;
+    pointer-events: none;
+    width: 100%;
+    height: 2px;
 }
 
 .underline::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: inherit;
-	display: block;
-	width: inherit;
-	height: inherit;
-	background-color: currentColor;
-	transition: transform .2s ease-out;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: inherit;
+    display: block;
+    width: inherit;
+    height: inherit;
+    background-color: currentColor;
+    transition: transform .2s ease-out;
 }
 
-.switcher-login .underline::before {
-	transform: translateX(101%);
+.switcher-login .underline::before,
+.switcher-add-user .underline::before {
+    transform: translateX(101%);
 }
 
-.switcher-signup .underline::before {
-	transform: translateX(-101%);
+.switcher-signup .underline::before,
+.switcher-view-users .underline::before {
+    transform: translateX(-101%);
 }
 
 .form-wrapper.is-active .underline::before {
-	transform: translateX(0);
+    transform: translateX(0);
 }
 
+/* Form Styling */
 .form {
-	overflow: hidden;
-	min-width: 260px;
-	margin-top: 50px;
-	padding: 30px 25px;
+    overflow: hidden;
+    min-width: 260px;
+    margin-top: 50px;
+    padding: 30px 25px;
     border-radius: 5px;
-	transform-origin: top;
+    transform-origin: top;
 }
 
-.form-login {
-	animation: hideLogin .3s ease-out forwards;
+/* Animations for Forms */
+.form-login,
+.form-add-user {
+    animation: hideLogin .3s ease-out forwards;
 }
 
-.form-wrapper.is-active .form-login {
-	animation: showLogin .3s ease-in forwards;
+.form-wrapper.is-active .form-login,
+.form-wrapper.is-active .form-add-user {
+    animation: showLogin .3s ease-in forwards;
 }
 
+.form-signup,
+.form-view-users {
+    animation: hideSignup .3s ease-out forwards;
+}
+
+.form-wrapper.is-active .form-signup,
+.form-wrapper.is-active .form-view-users {
+    animation: showSignup .3s ease-in forwards;
+}
+
+/* Keyframes for Form Animations */
 @keyframes showLogin {
-	0% {
-		background: #d7e7f1;
-		transform: translate(40%, 10px);
-	}
-	50% {
-		transform: translate(0, 0);
-	}
-	100% {
-		background-color: #00ccff;
-		transform: translate(35%, -20px);
-	}
+    0% {
+        background: #d7e7f1;
+        transform: translate(40%, 10px);
+    }
+    50% {
+        transform: translate(0, 0);
+    }
+    100% {
+        background-color: #00ccff;
+        transform: translate(35%, -20px);
+    }
 }
 
 @keyframes hideLogin {
-	0% {
-		background-color: #fff;
-		transform: translate(35%, -20px);
-	}
-	50% {
-		transform: translate(0, 0);
-	}
-	100% {
-		background: #d7e7f1;
-		transform: translate(40%, 10px);
-	}
-}
-
-.form-signup {
-	animation: hideSignup .3s ease-out forwards;
-}
-
-.form-wrapper.is-active .form-signup {
-	animation: showSignup .3s ease-in forwards;
+    0% {
+        background-color: #fff;
+        transform: translate(35%, -20px);
+    }
+    50% {
+        transform: translate(0, 0);
+    }
+    100% {
+        background: #d7e7f1;
+        transform: translate(40%, 10px);
+    }
 }
 
 @keyframes showSignup {
-	0% {
-		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
-	}
-	50% {
-		transform: translate(0, 0) scaleY(.8);
-	}
-	100% {
-		background-color: #00ccff;
-		transform: translate(-35%, -20px) scaleY(1);
-	}
+    0% {
+        background: #d7e7f1;
+        transform: translate(-40%, 10px) scaleY(.8);
+    }
+    50% {
+        transform: translate(0, 0) scaleY(.8);
+    }
+    100% {
+        background-color: #00ccff;
+        transform: translate(-35%, -20px) scaleY(1);
+    }
 }
 
 @keyframes hideSignup {
-	0% {
-		background-color: #fff;
-		transform: translate(-35%, -20px) scaleY(1);
-	}
-	50% {
-		transform: translate(0, 0) scaleY(.8);
-	}
-	100% {
-		background: #d7e7f1;
-		transform: translate(-40%, 10px) scaleY(.8);
-	}
+    0% {
+        background-color: #fff;
+        transform: translate(-35%, -20px) scaleY(1);
+    }
+    50% {
+        transform: translate(0, 0) scaleY(.8);
+    }
+    100% {
+        background: #d7e7f1;
+        transform: translate(-40%, 10px) scaleY(.8);
+    }
 }
 
+/* Fieldset and Labels */
 .form fieldset {
-	position: relative;
-	opacity: 0;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	transition: all .3s ease-out;
+    position: relative;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    transition: all .3s ease-out;
 }
 
-.form-login fieldset {
-	transform: translateX(-50%);
+.form-login fieldset,
+.form-add-user fieldset {
+    transform: translateX(-50%);
 }
 
-.form-signup fieldset {
-	transform: translateX(50%);
+.form-signup fieldset,
+.form-view-users fieldset {
+    transform: translateX(50%);
 }
 
 .form-wrapper.is-active fieldset {
-	opacity: 1;
-	transform: translateX(0);
-	transition: opacity .4s ease-in, transform .35s ease-in;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity .4s ease-in, transform .35s ease-in;
 }
 
 .form legend {
-	position: absolute;
-	overflow: hidden;
-	width: 1px;
-	height: 1px;
-	clip: rect(0 0 0 0);
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip: rect(0 0 0 0);
 }
 
 .input-block {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .input-block label {
-	font-size: 14px;
-  color: #fdfdfd;
+    font-size: 14px;
+    color: #fdfdfd;
 }
 
 .input-block input {
-	display: block;
-	width: 100%;
-	margin-top: 8px;
-	padding-right: 15px;
-	padding-left: 15px;
-	font-size: 16px;
-	line-height: 40px;
-	color: #3b4465;
-  	background: #eef9fe;
-  	border: 1px solid #cddbef;
- 	border-radius: 2px;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: 16px;
+    line-height: 40px;
+    color: #3b4465;
+    background: #eef9fe;
+    border: 1px solid #cddbef;
+    border-radius: 2px;
 }
 
+/* Buttons */
 .form [type='submit'] {
-	opacity: 0;
-	display: block;
-	min-width: 120px;
-	margin: 30px auto 10px;
-	font-size: 18px;
-	line-height: 40px;
-	border-radius: 25px;
-	border: none;
-	transition: all .3s ease-out;
+    opacity: 0;
+    display: block;
+    min-width: 120px;
+    margin: 30px auto 10px;
+    font-size: 18px;
+    line-height: 40px;
+    border-radius: 25px;
+    border: none;
+    transition: all .3s ease-out;
 }
 
 .form-wrapper.is-active .form [type='submit'] {
-	opacity: 1;
-	transform: translateX(0);
-	transition: all .4s ease-in;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all .4s ease-in;
 }
 
+/* Checkbox Group */
 .checkbox-group {
     display: flex;
     gap: 70px;
 }
 
-.btn-login {
-	color: #fbfdff;
-	background: #00ccff;
+.btn-login,
+.btn-add-user {
+    color: #fbfdff;
+    background: #00ccff;
     box-shadow: inset 0 0 0 2px #fbfdff;
     transform: translateX(-30%);
 }
 
-.btn-signup {
-	color: #fbfdff;
-	background: #00ccff;
-	box-shadow: inset 0 0 0 2px #fbfdff;
-	transform: translateX(30%);
+.btn-signup,
+.btn-view-users {
+    color: #fbfdff;
+    background: #00ccff;
+    box-shadow: inset 0 0 0 2px #fbfdff;
+    transform: translateX(30%);
 }
 
 /* Post page */
@@ -612,4 +637,69 @@ img[src="../img/defaultimage.png"] {
 #regenerate-captcha:hover {
     background-color: #0056b3;  /* Background color on hover */
     border-color: #0056b3;      /* Border color on hover */
+}
+
+/* Admin page */
+.admin-icon {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	font-size: 24px;
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.admin-icon:hover {
+	color: #023f80;
+}
+
+.admin-input-block label {
+    color: #000000;
+    font-size: 14px;
+}
+
+.admin-input-block input{
+	display: block;
+	width: 100%;
+	margin-top: 8px;
+	padding-right: 15px;
+	padding-left: 15px;
+	font-size: 16px;
+	line-height: 40px;
+	color: #3b4465;
+  	background: #eef9fe;
+  	border: 1px solid #cddbef;
+ 	border-radius: 2px;
+}
+
+/* Alert messages when admin creates a user */
+.message-container {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    max-width: 90%;
+    text-align: center;
+    z-index: 1000;
+}
+
+.alert {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
