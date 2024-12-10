@@ -1,4 +1,11 @@
 <?php
+/*******w******** 
+ 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: Isolates a single post with this script.
+
+****************/
 include '../activity/header.php';
 require '../activity/db_connect.php'; 
 

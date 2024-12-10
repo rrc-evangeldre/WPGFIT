@@ -1,14 +1,11 @@
-
 <?php
-
 /*******w******** 
 
     Name: Raphael Evangelista
-    Date: Nov. 8, 2024
+    Date: December 9, 2024
     Description: This file establishes a PDO connection to the WPGFIT database in phpMyAdmin.
 
 ****************/
-
 // Prevent constant redefinition
 if (!defined('DB_DSN')) {
     define('DB_DSN', 'mysql:host=localhost;dbname=wpgfit;charset=utf8');
@@ -29,7 +26,5 @@ try {
     // Print error message and stop execution
     print "Error: " . $e->getMessage();
     die(); 
-    // Note: For production, use a secure error logging method instead of printing to the user
 }
-
 ?>

@@ -1,21 +1,19 @@
 <?php
 /*******w******** 
-    Name: Raphael Evangelista
-    Date: November 14, 2024
-    Description: Edit an existing post with this page.
-****************/
 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: This script allows users to edit their posts, including updating the title, 
+                 content, tags, and associated image. Admins can edit any post, while regular 
+                 users can only edit their own posts.
+
+****************/
 include '../activity/db_connect.php';
 include '../activity/header.php';
 
 // Ensure the user is logged in before allowing them to edit
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-}
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['login_error'] = "You must be logged in to edit a post.";
-    header("Location: ../logins/login.php");
-    exit();
 }
 
 // Fetch the post to edit
@@ -41,6 +39,7 @@ if (!$post) {
 $userID = $_SESSION['user_id'];
 $isAdmin = isset($_SESSION['role']) && in_array('Admin', (array)$_SESSION['role']);
 
+// Display an error for unauthorized users trying to edit the post
 if ($post['UserID'] != $userID && !$isAdmin) {
     echo "<p class='text-center mt-5'>You are not authorized to edit this post.</p>";
     exit();
@@ -121,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!-- TinyMCE -->
+<!-- TinyMCE WYSIWYG Editor -->
 <script src="https://cdn.tiny.cloud/1/ctiai9wqjk73i9rw7xilic60291laiu79yydw9n8uts9y9vm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
@@ -133,17 +132,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
 </script>
 
+<!-- Post Editing Form -->
 <div class="container mt-5">
   <div class="post-container p-4 border rounded">
     <form accept-charset="UTF-8" action="" method="POST" enctype="multipart/form-data">
+        
+        <!-- Title Field -->
       <div class="post-group">
         <label for="title">Title</label>
         <input type="text" name="title" class="form-control" id="title" value="<?= htmlspecialchars($post['Title']) ?>" required>
       </div>
+
+        <!-- Description Field -->
       <div class="post-group">
         <label for="description">Description</label>
         <textarea name="description" id="description" class="form-control"><?= htmlspecialchars($post['Content']) ?></textarea>
       </div>
+
+      <!-- Categories Section -->
       <div class="post-group">
         <label>Add Tags (optional)</label><br>
         <div class="checkbox-group"> 
@@ -157,6 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
       <hr>
+
+      <!-- File Upload Section -->
       <div class="post-group mt-3">
         <label class="mr-2">Upload a new file (optional):</label>
         <input type="file" name="file">
@@ -168,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <hr>
 
+        <!-- Display any upload errors -->
       <?php if ($uploadError): ?>
         <div class="alert alert-danger mt-3"><?= htmlspecialchars($uploadError) ?></div>
       <?php endif; ?>

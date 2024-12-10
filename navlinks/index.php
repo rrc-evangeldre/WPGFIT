@@ -2,11 +2,10 @@
 /*******w******** 
   
     Name: Raphael Evangelista
-    Date: November 12, 2024
-    Description: Updated to filter posts by both category and search keyword.
+    Date: December 9, 2024
+    Description: This script handles the blog's main page functionality.
 
 ****************/
-
 session_start();
 include '../activity/db_connect.php';
 include '../activity/header.php';

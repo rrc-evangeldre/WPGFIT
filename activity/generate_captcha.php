@@ -1,9 +1,16 @@
 <?php
+/*******w******** 
+
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: This script generates a CAPTCHA image when a user is submitting a comment.
+
+****************/
 session_start();
 
 header('Content-Type: image/png');
 
-// Generate random CAPTCHA text
+// Generate random 5 character CAPTCHA text
 $captchaText = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"), 0, 5);
 $_SESSION['captcha'] = $captchaText;
 

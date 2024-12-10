@@ -1,14 +1,14 @@
 <?php
+/*******w******** 
+ 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: This script handles user management for the admin interface. 
+                 Admins can update user roles or delete users from the database.
+
+****************/
 session_start();
 include '../activity/db_connect.php';
-
-// Check if the current user is an Admin
-if (!isset($_SESSION['role']) || !in_array('Admin', (array)$_SESSION['role'])) {
-    // Creates an error message and redirects non-admin users to the home page
-    $_SESSION['register_error'] = "Unauthorized access.";
-    header("Location: ../index.php");
-    exit();
-}
 
 // Retrieve the user ID and action (edit or delete) from the form submission
 $userId = $_POST['user_id'] ?? null;

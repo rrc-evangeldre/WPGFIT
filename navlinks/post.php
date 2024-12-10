@@ -1,10 +1,11 @@
 <?php
 /*******w******** 
+ 
     Name: Raphael Evangelista
-    Date: November 14, 2024
+    Date: December 9, 2024
     Description: Create a new post with this page.
-****************/
 
+****************/
 include '../activity/db_connect.php';
 include '../activity/header.php';
 

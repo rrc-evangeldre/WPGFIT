@@ -1,3 +1,5 @@
+/* Global Styles */
+
 html { overflow-x: hidden; }
 
 body {
@@ -16,6 +18,7 @@ hr {
     margin-bottom: 10px;
 }
 
+/* Header Styles */
 .header {
     background-color: #00ccff;
     color: white;
@@ -42,6 +45,7 @@ hr {
     height: 0;
 }
 
+/* Site Logo */
 .site-logo {
     margin-top: 50px;
     margin-bottom: 50px;
@@ -57,6 +61,7 @@ hr {
     padding: 80px 100px 25px;
 }
 
+/* Post specific styling */
 .post { max-width: 470px; }
 
 .row-posts {
@@ -64,6 +69,7 @@ hr {
     justify-content: space-between;
 }
 
+/* Side navigation menu styles */
 .side-nav { 
 	margin-bottom: 50px; 
     height: 520px; 
@@ -115,8 +121,7 @@ ul {
 
 .side-nav { margin-left: -30px; }
 
-.navbar-toggler { display: none; }
-
+/* Search Form */
 .search-form {
     display: flex;
     align-items: center;
@@ -590,9 +595,9 @@ img[src="../img/defaultimage.png"] {
 /* Center the buttons horizontally at the top */
 .edit-button {
     position: absolute;
-    top: 30px;    /* Adjust distance from the top */
-    left: 77%;    /* Center horizontally */
-    transform: translateX(-50%);  /* Adjust position to fully center */
+    top: 30px;
+    left: 77%;
+    transform: translateX(-50%);
 }
 
 .edit-button a{
@@ -600,7 +605,7 @@ img[src="../img/defaultimage.png"] {
 
 }
 .edit-button a:hover {
-    color: #0d809c;  /* Darker green when hovered */
+    color: #0d809c;
 }
 
 /* Styling for category dropdown and search bar */
@@ -610,16 +615,16 @@ img[src="../img/defaultimage.png"] {
 }
 
 .search-form .dropdown {
-    margin-right: 10px; /* Space between dropdown and search bar */
+    margin-right: 10px;
 }
 
 .search-form .search-input {
-    flex-grow: 1; /* Allow search input to take available space */
-    max-width: 300px; /* Adjust the width of the search input */
+    flex-grow: 1;
+    max-width: 300px;
 }
 
 .search-form .search-button {
-    margin-left: 10px; /* Space between input and button */
+    margin-left: 10px;
 }
 
 .search-form .dropdown-menu {
@@ -629,14 +634,14 @@ img[src="../img/defaultimage.png"] {
 
 /* Comments */
 #regenerate-captcha {
-    background-color: #00ccff;  /* Custom background color */
-    border-color: #ffffff;      /* Custom border color */
-    color: white;               /* Custom text color */
+    background-color: #00ccff;
+    border-color: #ffffff;
+    color: white;
 }
 
 #regenerate-captcha:hover {
-    background-color: #0056b3;  /* Background color on hover */
-    border-color: #0056b3;      /* Border color on hover */
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
 
 /* Admin page */

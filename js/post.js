@@ -1,5 +1,12 @@
- // JavaScript to enforce a limit of 3 checked categories
+ /*******w******** 
 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: These functions contain these functionalities:
+                - Limits 3 checked categories
+
+****************/
+// JavaScript to enforce a limit of 3 checked categories
  const generalCheckbox = document.getElementById('general');
  const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#general)');
  const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -17,7 +24,7 @@
      }
  }
  
- // Add event listeners for changes to any of the checkboxes
+ // Automatically unchecks the "General" checkbox if another checkbox is selected for the first time.
  allCheckboxes.forEach(checkbox => {
      checkbox.addEventListener('change', function() {
          // Prevent selecting more than 3 categories

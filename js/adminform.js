@@ -1,3 +1,14 @@
+/*******w******** 
+
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: These functions:
+                - Handle adding and deleting roles for the selected user.
+                - Reset all checkboxes to unchecked and enabled.
+                - Always checks and disables the "Member" checkbox as it is mandatory.
+                - Check the roles that the selected user has.
+
+****************/
 function fetchUserRoles() {
     const selectUser = document.getElementById('select-user');
     const selectedOption = selectUser.options[selectUser.selectedIndex];

@@ -2,13 +2,13 @@
 /*******w******** 
         
     Name: Raphael Evangelista
-    Date: November 12, 2024
-    Description: Login and Registration Form. Handles user login and registration, showing error messages for invalid inputs such as taken username or email.
+    Date: December 9, 2024
+    Description: This handles the login and registration forms for users.
 
 ****************/
-
 include '../activity/header.php';
 
+// Display login or registration error message, if any
 if (isset($_SESSION['login_error'])) {
     echo "<script>alert('" . $_SESSION['login_error'] . "');</script>";
     unset($_SESSION['login_error']);

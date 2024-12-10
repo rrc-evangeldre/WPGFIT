@@ -2,7 +2,7 @@
 /*******w******** 
 
     Name: Raphael Evangelista
-    Date: November 12, 2024
+    Date: December 9, 2024
     Description: Handles the registration process by validating user inputs and storing multiple roles as a comma-separated string.
 
 ****************/

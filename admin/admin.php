@@ -1,4 +1,13 @@
 <?php
+/*******w******** 
+ 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: This contains the admin interface for managing users.
+                 Admins can add new users and view/manage existing users, 
+                 including editing their roles and deleting them. 
+    
+****************/
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -105,8 +114,6 @@ try {
                         <?php endforeach; ?>
                     </select>
                 </div>
-
-
                     <div class="admin-input-block">
                         <label for="edit-roles">Edit Roles</label>
                         <div class="checkbox-group">

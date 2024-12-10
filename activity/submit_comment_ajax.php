@@ -1,4 +1,12 @@
 <?php
+/*******w******** 
+ 
+    Name: Raphael Evangelista
+    Date: December 9, 2024
+    Description: This script handles the submission of comments on posts. 
+                 Including validation for comment text and the CAPTCHA.
+    
+****************/
 session_start();
 include '../activity/db_connect.php';
 

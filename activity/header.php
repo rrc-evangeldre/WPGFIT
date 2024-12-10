@@ -2,15 +2,16 @@
 /*******w******** 
  
     Name: Raphael Evangelista
-    Date: November 11, 2024
-    Description: This is the header template that manages session start, page titles, and active state for navigation.
+    Date: December 9, 2024
+    Description: This is the header template that manages session start, 
+                 page titles, and active state for navigation.
     
 ****************/
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Get the current page's file name
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Set page title and active state
@@ -57,12 +58,11 @@ switch ($current_page) {
 <body>
     <header class="header" id="header">
         <div class="side-toggler">
-            <button class="navbar-toggler" type="button" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
             <div class="site-logo">
                 <img src="../img/wpgfit.png" alt="Image" class="img-fluid">                            
             </div>
+
+            <!-- Navigation menu -->
             <nav class="side-nav" id="side-nav">            
                 <ul>
                     <li class="side-nav-item <?php if($active_page == 'home') echo 'active'; ?>">
@@ -109,7 +109,7 @@ switch ($current_page) {
                 </ul>
             </nav>
 
-            <!-- Admin Button -->
+            <!-- Admin Button for Admins -->
             <?php if (isset($_SESSION['role']) && in_array('Admin', (array)$_SESSION['role'])): ?>
                 <a href="../admin/admin.php" class="admin-icon">
                     <i class="fa-solid fa-people-roof"></i>
