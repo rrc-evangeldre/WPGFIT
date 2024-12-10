@@ -4,12 +4,22 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include '../activity/header.php';
+include '../activity/db_connect.php';
 
-// Redirect non-admin users to another page
+// Redirect non-admin users to home page with an error message
 if (!isset($_SESSION['role']) || !in_array('Admin', (array)$_SESSION['role'])) {
-    $_SESSION['error_message'] = "You do not have permission to access the admin page.";
-    header("Location: ../index.php");
+    header("Location: ../navlinks/index.php");
     exit();
+}
+
+// Fetch all users in alphabetical order
+$users = [];
+try {
+    $stmt = $db->prepare("SELECT UserID, Username, Role FROM users ORDER BY Username ASC");
+    $stmt->execute();
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $_SESSION['register_error'] = "Failed to fetch users: " . $e->getMessage();
 }
 ?>
 
@@ -76,21 +86,58 @@ if (!isset($_SESSION['role']) || !in_array('Admin', (array)$_SESSION['role'])) {
             </form>
         </div>
 
-        <!-- View Users Form -->
+        <!-- View/Manage Users Form -->
         <div class="form-wrapper">
             <button type="button" class="switcher switcher-view-users">View Users <span class="underline"></span></button>
-            <form class="form form-view-users" action="view_users.php" method="POST">
+            <form class="form form-view-users" action="manage_users.php" method="POST">
                 <fieldset>
-                    <legend>Manage existing users.</legend>
+                    <legend>Select a user to edit or delete.</legend>
                     <div class="input-block">
-                        <label for="search-user">Search User</label>
-                        <input id="search-user" name="search" type="text" autocomplete="off">
+                    <label for="select-user">Select User</label>
+                    <select id="select-user" name="user_id" required onchange="handleUserSelection()">
+                        <option value="">-- Select a User --</option>
+                        <?php foreach ($users as $user): ?>
+                            <option value="<?php echo $user['UserID']; ?>" 
+                                    data-roles="<?php echo htmlspecialchars($user['Role']); ?>" 
+                                    data-is-admin="<?php echo strpos($user['Role'], 'Admin') !== false ? 'true' : 'false'; ?>">
+                                <?php echo htmlspecialchars($user['Username']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+
+                    <div class="admin-input-block">
+                        <label for="edit-roles">Edit Roles</label>
+                        <div class="checkbox-group">
+                            <div>
+                                <label>
+                                    <input type="checkbox" id="role-admin" name="roles[]" value="Admin"> Admin
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" id="role-professional" name="roles[]" value="Professional"> Professional
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" id="role-influencer" name="roles[]" value="Influencer"> Influencer
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                <input type="checkbox" id="role-member" name="roles[]" value="Member" checked disabled> Member (Default)
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="btn-view-users">Search</button>
+
+                    <button type="submit" name="action" value="edit" class="btn-edit-user">Edit Roles</button>
+                    <button type="submit" name="action" value="delete" class="btn-delete-user">Delete User</button>
                 </fieldset>
             </form>
         </div>
     </div>
 </section>
-
 <?php include '../activity/footer.php'; ?>
